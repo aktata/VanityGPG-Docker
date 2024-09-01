@@ -1,6 +1,6 @@
 # VanityGPG Docker
 
-VanityGPG Docker 是一个用于生成自定义GPG密钥的Docker镜像。该项目基于 [VanityGPG](https://github.com/aktata/vanitygpg) 工具，通过Docker容器化，使得生成符合特定模式的GPG公钥更为简便和高效。
+VanityGPG Docker 是一个用于生成自定义GPG密钥的Docker镜像。该项目基于 [VanityGPG](https://github.com/RedL0tus/VanityGPG) 工具，通过Docker容器化，使得生成符合特定模式的GPG公钥更为简便和高效。
 
 ## 功能
 
