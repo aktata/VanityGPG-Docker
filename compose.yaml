@@ -5,3 +5,9 @@ services:
     volumes:
       - ./data:/workspace
     command: -c Ed25519 -j8 -u "aktata <aktata@outlook.com>" -p "(A{12,16}|B{12,16}|C{12,16}|D{12,16}|E{12,16}|F{12,16}|0{12,16}|1{12,16}|2{12,16}|3{12,16}|4{12,16}|5{12,16}|6{12,16}|7{12,16}|8{12,16}|9{12,16})$"
+    healthcheck:
+      test: ["CMD", "pgrep", "vanity_gpg"]  # 使用 pgrep 检查 vanity_gpg 进程是否运行
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
