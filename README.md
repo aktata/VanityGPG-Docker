@@ -1,10 +1,12 @@
 # VanityGPG Docker
 
-VanityGPG Docker 是一个用于生成自定义GPG密钥的Docker镜像。该项目基于 [VanityGPG](https://github.com/RedL0tus/VanityGPG) 工具，通过Docker容器化，使得生成符合特定模式的GPG公钥更为简便和高效。
+VanityGPG Docker 是一个用于生成和筛选自定义GPG密钥的Docker镜像。该项目基于 [VanityGPG](https://github.com/RedL0tus/VanityGPG) 工具，通过Docker容器化，使得生成符合特定模式的GPG公钥更加简便和高效。
 
 ## 功能
 
-- 生成包含特定字符串的GPG公钥。
+- 使用多线程生成包含特定字符串的GPG公钥。
+- 支持多种密码套件（例如Ed25519、RSA等）。
+- 提供干运行（Dry Run）模式，不保存匹配的密钥。
 - 使用Docker和Docker Compose简化安装和运行环境的配置。
 
 ## 先决条件
@@ -34,10 +36,10 @@ VanityGPG Docker 是一个用于生成自定义GPG密钥的Docker镜像。该项
 3. 运行容器并生成自定义GPG密钥：
 
     ```bash
-    docker run --rm vanitygpg -t "yourdesiredtext"
+    docker run --rm vanitygpg --pattern "yourdesiredtext"
     ```
 
-    以上命令会启动一个Docker容器并生成包含“yourdesiredtext”文本的GPG公钥。请替换`yourdesiredtext`为你想要的自定义字符串。
+    以上命令会启动一个Docker容器并生成包含`yourdesiredtext`的GPG公钥。请替换`yourdesiredtext`为你想要的自定义字符串。
 
 ### 使用Docker Compose
 
@@ -62,9 +64,19 @@ Docker Compose文件提供了一种简单的方法来运行容器。可以按照
 
 你可以通过以下选项自定义生成的GPG密钥：
 
-- `-t` 或 `--text`：指定你想在GPG公钥中包含的文本。
-- `-k` 或 `--key-type`：指定密钥类型，例如`rsa`或`dsa`。（可选）
-- `-l` 或 `--length`：指定密钥长度，例如`2048`或`4096`。（可选）
+### 标志 (Flags)
+
+- `-d, --dry-run`：干运行模式（不保存匹配的密钥）。
+- `-h, --help`：显示帮助信息。
+- `-v, --verbose`：增加详细输出信息级别。
+- `-V, --version`：显示版本信息。
+
+### 选项 (Options)
+
+- `-c, --cipher-suite <cipher-suite>`：指定密码套件。默认是`Ed25519`，可选值有：`Ed25519`, `RSA2048`, `RSA3072`, `RSA4096`, `NISTP256`, `NISTP384`, `NISTP521`。
+- `-j, --jobs <jobs>`：指定线程数（默认为8）。
+- `-p, --pattern <pattern>`：指定用于匹配指纹的正则表达式模式。
+- `-u, --user-id <user-id>`：指定符合OpenPGP的用户ID。
 
 在`docker-compose.yml`文件中，您可以编辑`command`部分来指定这些选项。
 
@@ -75,7 +87,7 @@ Docker Compose文件提供了一种简单的方法来运行容器。可以按照
 1. 编辑`docker-compose.yml`文件，将`command`字段修改为：
 
     ```yaml
-    command: ["-t", "hello"]
+    command: ["--pattern", "hello"]
     ```
 
 2. 启动服务：
